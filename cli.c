@@ -52,18 +52,18 @@ static void receive_list_result(struct ubus_context *ctx, struct ubus_object_dat
 	int rem;
 
 	if (simple_output || !verbose) {
-		printf("%s\n", obj->path);
+		fprintf(stderr, "%s\n", obj->path);
 		return;
 	}
 
-	printf("'%s' @%08x\n", obj->path, obj->id);
+	fprintf(stderr, "'%s' @%08x\n", obj->path, obj->id);
 
 	if (!obj->signature)
 		return;
 
 	blob_for_each_attr(cur, obj->signature, rem) {
 		s = blobmsg_format_json_with_cb(cur, false, format_type, NULL, -1);
-		printf("\t%s\n", s);
+		fprintf(stderr, "\t%s\n", s);
 		free(s);
 	}
 }
@@ -75,7 +75,7 @@ static void receive_call_result_data(struct ubus_request *req, int type, struct 
 		return;
 
 	str = blobmsg_format_json_indent(msg, true, simple_output ? -1 : 0);
-	printf("%s\n", str);
+	fprintf(stderr, "%s\n", str);
 	free(str);
 }
 
@@ -85,7 +85,7 @@ static void receive_event(struct ubus_context *ctx, struct ubus_event_handler *e
 	char *str;
 
 	str = blobmsg_format_json(msg, true);
-	printf("{ \"%s\": %s }\n", type, str);
+	fprintf(stderr, "{ \"%s\": %s }\n", type, str);
 	free(str);
 }
 
